@@ -622,6 +622,3 @@ class Moderation(commands.Cog):
 # Setup endpoint hook configuration
 async def setup(bot):
     await bot.add_cog(Moderation(bot))
-
-def setup(bot):
-    bot.add_cog(Moderation(bot))
