@@ -602,7 +602,7 @@ class Moderation(commands.Cog):
         """Shows invite leaderboard."""
         await ctx.send("📊 Top invite envoys: 1. DevGuy (12 invites), 2. ModTeam (8 invites).")
 
-    # ==========================================
+     # ==========================================
     # --- FEEDBACK & SUGGESTIONS ---
     # ==========================================
     @commands.command()
@@ -618,6 +618,10 @@ class Moderation(commands.Cog):
         """Approve a suggestion."""
         # Implementation goes here
         pass
+
+# Setup endpoint hook configuration
+async def setup(bot):
+    await bot.add_cog(Moderation(bot))
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
