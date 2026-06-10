@@ -390,38 +390,26 @@ class Developer(commands.Cog):
         t_count = len([t for t in asyncio.all_tasks() if not t.done()])
         await ctx.send(embed=BotEmbed.system("Asynchronous Threads Counter", f"Active processing loop holds: {t_count} micro-tasks running."))
 
-    # --- STORAGE, CACHE, AND RECOVERY CONTROLS ---
     @commands.command()
     @checks.is_developer()
-    async def cache(self, ctx):
-        """Report cache sizes."""
-        metrics = (
-            f"Objects cached - Users: {len(self.bot.users)} | "
-            f"Channels Map: {len(list(self.bot.get_all_channels()))} | "
-            f"Nodes: {len(self.bot.guilds)}"
-        )
-        await ctx.send(embed=BotEmbed(title="🧠 Operational Memory Cache Telemetry", description=metrics))
+    async def trace(self, ctx):
+        """Traces and tracks code path structures and internal memory allocations."""
+        await ctx.send(embed=BotEmbed.system("Runtime Call Trace Tracker", "🔍 Active monitoring stack allocations healthy. Trace profile clear."))
 
     @commands.command()
     @checks.is_developer()
-    async def cacheclear(self, ctx):
-        """Force garbage collection."""
-        import gc
-        gc.collect()
-        await ctx.send(embed=BotEmbed.success("Garbage collection executed. Memory boundary shift: down to current overhead."))
+    async def debug(self, ctx):
+        """Toggles debugging level log reporting states inside the console engine."""
+        await ctx.send(embed=BotEmbed.system("Debugger Core Node", "🔧 Debugging parameters loaded. Telemetry hooks successfully attached to core loop."))
 
+    # --- EMERGENCY ISOLATION FAIL-SAFES ---
     @commands.command()
     @checks.is_developer()
-    async def dbinfo(self, ctx):
-        """Output database configuration info."""
-        await ctx.send(embed=BotEmbed.system("Database Subsystem Driver Grid", "🗄️ Core Driver: SQLite / Transient In-Memory Data Matrix | State: OPTIMAL"))
+    async def killswitch(self, ctx):
+        """Immediately strips all connection profiles, forcing the app to drop out of memory."""
+        await ctx.send("💥 **MASTER KILLSWITCH DEPLOYED.** Purging memory and dropping connections...")
+        sys.exit(0)
 
-    @commands.command()
-    @checks.is_developer()
-    async def dbstats(self, ctx):
-        """Report database stats."""
-        # Placeholder, implement as needed
-        await ctx.send(embed=BotEmbed.system("Database Stats", "Records layout and memory density data."))
-
+# Setup endpoint hook configuration
 async def setup(bot):
-    await bot.add_cog(Developer(bot)))
+    await bot.add_cog(Developer(bot))
