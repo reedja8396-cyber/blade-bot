@@ -423,5 +423,5 @@ class Developer(commands.Cog):
         # Placeholder, implement as needed
         await ctx.send(embed=BotEmbed.system("Database Stats", "Records layout and memory density data."))
 
-def setup(bot):
-    bot.add_cog(Developer(bot))
+async def setup(bot):
+    await bot.add_cog(Developer(bot)))
