@@ -12,7 +12,6 @@ bot = commands.Bot(
 )
 
 COGS = [
-    "utility",
     "moderation",
     "developer",
     "owner"
