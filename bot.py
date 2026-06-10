@@ -12,10 +12,10 @@ bot = commands.Bot(
 )
 
 COGS = [
-    "cogs.utility",
-    "cogs.moderation",
-    "cogs.developer",
-    "cogs.owner"
+    "utility",
+    "moderation",
+    "developer",
+    "owner"
 ]
 
 @bot.event
