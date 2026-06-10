@@ -1,45 +1,23 @@
+import os
+import asyncio
 import discord
 from discord.ext import commands
-import config
-import asyncio
-import os
 
-intents = discord.Intents.all()
-bot = commands.Bot(command_prefix=config.PREFIX, intents=intents)
-
-# Attach dynamic structures globally
-bot.panic_mode = config.PANIC_MODE
-bot.watchlist = config.WATCHLIST
-bot.trust_scores = config.TRUST_SCORES
-bot.user_notes = config.USER_NOTES
-bot.user_flags = config.USER_FLAGS
-
-@bot.event
-async def on_ready():
-    print("=========================================")
-    print(f"📡 CLIENT ONLINE: {bot.user.name} ({bot.user.id})")
-    print(f"🎚️ DEFAULT PREFIX: '{config.PREFIX}'")
-    print("=========================================")
-    try:
-        synced = await bot.tree.sync()
-        print(f"🔄 Synced {len(synced)} global Slash commands.")
-    except Exception as e:
-        print(f"❌ Slash sync failure: {e}")
-
-async def load_extensions():
-    # Structural module scripts to load as extensions
-    extensions = ['developer', 'moderation', 'owner', 'logger']
-    for ext in extensions:
-        try:
-            await bot.load_extension(ext)
-            print(f"📦 Module Loaded: {ext}.py")
-        except Exception as e:
-            print(f"❌ Failed to load {ext}.py: {e}")
+# ... (Keep your existing bot = commands.Bot(...) configuration setup up here)
 
 async def main():
-    async with bot:
-        await load_extensions()
-        await bot.start(config.TOKEN)
+    # This automatically loops through your files and loads them as extensions
+    for filename in os.listdir('./'):
+        if filename.endswith('.py') and filename not in ['bot.py', 'checks.py', 'config.py', 'runtime.txt']:
+            extension_name = filename[:-3]
+            try:
+                await bot.load_extension(extension_name)
+                print(f"✓ Loaded {extension_name}")
+            except Exception as e:
+                print(f"✗ Failed to load {extension_name}: {e}")
 
-if __name__ == "__main__":
-    asyncio.run(main())
+    # Start the bot after loading everything
+    async with bot:
+        await bot.start(TOKEN) # Make sure TOKEN matches your variable name
+
+asyncio.run(main())
