@@ -1,7 +1,7 @@
 import os
 
 # Base Token and Credentials
-TOKEN = "YOUR_BOT_TOKEN_HERE"
+TOKEN = "MTUwMDU3NDIwMDg2NjU0MTU4MA.GA7lnG.kU-8Y6B8GGzqIgf84GLJ8rd4cXKBsZcJKKbPYc"
 PREFIX = ","
 
 # Global Permissions Hierarchy
