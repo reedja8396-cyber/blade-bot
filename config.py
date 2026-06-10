@@ -1,26 +1,31 @@
 import os
 
-# Base Token and Credentials
-TOKEN = "MTUwMDU3NDIwMDg2NjU0MTU4MA.GA7lnG.kU-8Y6B8GGzqIgf84GLJ8rd4cXKBsZcJKKbPYc"
+# --- RAILWAY ENVIRONMENT VARIABLES ---
+# os.getenv pulls the value directly from your Railway Variables tab
+TOKEN = os.getenv("TOKEN") 
 PREFIX = ","
 
-# Global Permissions Hierarchy
-OWNERS = [1489289347650949302]        # Add Discord User IDs for Bot Owners
-DEVELOPERS = [1489289347650949302]    # Add Discord User IDs for Developers
-PREMIUM_GUILDS = []                  # Add Server IDs with Premium Perks Enabled
-PREMIUM_USERS = []                   # Add User IDs with Premium Perks Enabled
+# --- GLOBAL PERMISSIONS HIERARCHY ---
+# Note: Put your Discord User ID integers inside these brackets
+OWNERS = []         # Add Discord User IDs for Bot Owners (e.g., [123456789])
+DEVELOPERS = []     # Add Discord User IDs for Developers
 
-# Global Security Settings
+# --- PREMIUM SYSTEM ENTRIES ---
+PREMIUM_GUILDS = [] # Add Server IDs with Premium Perks Enabled
+PREMIUM_USERS = []  # Add User IDs with Premium Perks Enabled
+
+# --- GLOBAL SECURITY SETTINGS ---
 PANIC_MODE = False
 ANTI_INVITE = True
 ANTI_LINK = True
-ANTI_SPAM_LIMIT = 5                  # Messages allowed per 5 seconds
+ANTI_SPAM_LIMIT = 5 # Messages allowed per 5 seconds
 
-# Storage / Diagnostics Framework
-WATCHLIST = []                       # List of User IDs under surveillance
-TRUST_SCORES = {}                    # Format: {user_id: score_int}
-USER_NOTES = {}                      # Format: {user_id: ["note1", "note2"]}
-USER_FLAGS = {}                      # Format: {user_id: ["FLAG_NAME"]}
+# --- STORAGE / DIAGNOSTICS FRAMEWORK ---
+WATCHLIST = []      # List of User IDs under surveillance
+TRUST_SCORES = {}   # Format: {user_id: score_int}
+USER_NOTES = {}     # Format: {user_id: ["note1", "note2"]}
+USER_FLAGS = {}     # Format: {user_id: ["FLAG_NAME"]}
 
-# API Credentials (If using AI Features)
-OPENAI_API_KEY = "sk-..."
+# --- OPTIONAL AI CREDENTIALS ---
+# If you add an OpenAI key in Railway variables, it will automatically connect here
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "sk-...")
