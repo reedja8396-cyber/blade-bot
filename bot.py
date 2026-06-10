@@ -1,41 +1,41 @@
 import asyncio
 import discord
 from discord.ext import commands
-from config import PREFIX, TOKEN
+from config import TOKEN, PREFIX
 
 intents = discord.Intents.all()
 
 bot = commands.Bot(
-    command_prefix=PREFIX,
-    intents=intents,
-    help_command=None
+command_prefix=PREFIX,
+intents=intents,
+help_command=None
 )
 
-COGS = [
-    "moderation",
-    "developer",
-    "owner"
+EXTENSIONS = [
+"moderation",
+"developer",
+"owner"
 ]
 
 @bot.event
 async def on_ready():
-    print(f"Logged in as {bot.user}")
+print(f"Logged in as {bot.user} ({bot.user.id})")
 
 @bot.event
 async def on_command_error(ctx, error):
-    if isinstance(error, commands.CheckFailure):
-        return await ctx.send("You are not authorized to use this command.")
-    if isinstance(error, commands.MissingPermissions):
-        return await ctx.send("Missing permissions.")
-    raise error
+print(error)
 
-async def load():
-    for cog in COGS:
-        await bot.load_extension(cog)
+async def load_extensions():
+for extension in EXTENSIONS:
+try:
+await bot.load_extension(extension)
+print(f"Loaded: {extension}")
+except Exception as e:
+print(f"Failed to load {extension}: {e}")
 
 async def main():
-    async with bot:
-        await load()
-        await bot.start(TOKEN)
+await load_extensions()
+await bot.start(TOKEN)
 
+if **name** == "**main**":
 asyncio.run(main())
